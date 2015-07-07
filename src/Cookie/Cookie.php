@@ -489,4 +489,34 @@ class Cookie
                ($timestamp <= PHP_INT_MAX) &&
                ($timestamp >= ~PHP_INT_MAX);
     }
+
+    /**
+     *
+     * Returns this cookie as a response header string.
+     *
+     * @return string
+     *
+     */
+    public function __toString()
+    {
+        $cookie = $this->toRequestHeaderString();
+        if ($this->expire) {
+            $dateTime = \DateTime::createFromFormat('U', $this->expire, new \DateTimeZone('GMT'));
+            $cookie .= '; expires=' . str_replace('+0000', '', $dateTime->format('D, d M Y H:i:s T'));
+        }
+        if ($this->domain) {
+            $cookie .= '; domain=' . $this->domain;
+        }
+        if ($this->path) {
+            $cookie .= '; path=' . $this->path;
+        }
+        if ($this->secure) {
+            $cookie .= '; secure';
+        }
+        if ($this->httponly) {
+            $cookie .= '; httponly';
+        }
+
+        return $cookie;
+    }
 }

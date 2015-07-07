@@ -179,7 +179,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cookie->getHttpOnly());
     }
 
-    public function test__toString()
+    public function testToRequestHeaderString()
     {
         $cookie = $this->newCookie('cname', 'cvalue');
 
@@ -218,5 +218,12 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($cookie->isExpired());
         $this->assertTrue($cookie->isExpired(true));
+    }
+
+    public function test__toString()
+    {
+        $cookie = $this->newCookie('cname', 'cvalue', 42, '/path', '.example.com');
+        $expected = 'cname=cvalue; expires=Thu, 01 Jan 1970 00:00:42 GMT; domain=.example.com; path=/path';
+        $this->assertEquals($expected, (string) $cookie);
     }
 }
